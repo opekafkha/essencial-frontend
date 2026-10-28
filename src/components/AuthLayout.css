@@ -1,0 +1,83 @@
+/* Shared visual treatment for login, registration and email confirmation. */
+.auth-layout {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  --auth-panel-green: #244f43;
+}
+.auth-layout .auth-story {
+  background: var(--auth-panel-green);
+  overflow: visible;
+  isolation: isolate;
+  --login-veil-opacity: .42;
+}
+.auth-story > .brand,
+.auth-story > .story-content,
+.auth-story > footer { position: relative; z-index: 1; }
+.auth-seam-tab {
+  --tab-join-radius: 28px;
+  position: absolute;
+  z-index: 2;
+  top: 38px;
+  left: 50%;
+  width: clamp(180px, 15vw, 270px);
+  height: clamp(76px, 7vw, 112px);
+  transform: translateX(-50%);
+  border-radius: 34px;
+  background: var(--auth-panel-green);
+  pointer-events: none;
+}
+/* Concave white corners soften both joins with the green panel. */
+.auth-seam-tab::before,
+.auth-seam-tab::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: var(--tab-join-radius);
+  height: var(--tab-join-radius);
+}
+.auth-seam-tab::before {
+  top: calc(-1 * var(--tab-join-radius));
+  background: radial-gradient(circle at top right, transparent calc(var(--tab-join-radius) - .5px), var(--auth-panel-green) var(--tab-join-radius));
+}
+.auth-seam-tab::after {
+  bottom: calc(-1 * var(--tab-join-radius));
+  background: radial-gradient(circle at bottom right, transparent calc(var(--tab-join-radius) - .5px), var(--auth-panel-green) var(--tab-join-radius));
+}
+.auth-botanical {
+  --plant-height: clamp(420px, 68dvh, 800px);
+  position: absolute;
+  z-index: 0;
+  display: block;
+  right: clamp(0px, 1.5vw, 28px);
+  /* The PNG has 50 transparent pixels below its stem (50 / 572). */
+  bottom: calc(var(--plant-height) * -0.0874126);
+  width: auto;
+  height: var(--plant-height);
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+@media (max-width: 1200px) and (min-width: 721px) {
+  .auth-botanical { --plant-height: clamp(330px, 48dvh, 560px); right: -12px; }
+}
+@media (max-width: 1050px) and (min-width: 721px) {
+  .auth-seam-tab { --tab-join-radius: 20px; top: 32px; width: 160px; height: 76px; border-radius: 26px; }
+}
+@media (max-width: 720px) { .auth-seam-tab { display: none; } }
+
+/* A green veil softens the plant while copy stays above it. */
+.auth-layout .auth-story::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgb(36 79 67 / var(--login-veil-opacity));
+  pointer-events: none;
+}
+
+.auth-tab-loader { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; display: grid; place-items: center; }
+.auth-mobile-loader { display: none; }
+@media (max-width: 720px) { .auth-mobile-loader { display: flex; justify-content: center; margin-bottom: 24px; } }

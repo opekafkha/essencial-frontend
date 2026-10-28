@@ -14,8 +14,7 @@ export const createVideoRoomResponseSchema = z.object({
 export type CreateVideoRoomResponse = z.infer<typeof createVideoRoomResponseSchema>
 
 export const getVideoRoomResponseSchema = z.object({
-  dailyRoomUrl: z.string().url(),
-  meetingToken: z.string(),
+  token: z.string().min(1),
 })
 
 export type GetVideoRoomResponse = z.infer<typeof getVideoRoomResponseSchema>

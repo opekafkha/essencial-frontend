@@ -1,3 +1,4 @@
+import { AuthLayout } from '../components/Design'
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { loginSchema } from '../shared'
@@ -22,47 +23,48 @@ export function LoginPage() {
     }
 
     setSubmitting(true)
-    const { error: signInError } = await supabase.auth.signInWithPassword(parsed.data)
-    setSubmitting(false)
-
-    if (signInError) {
-      setError(
-        signInError.message === 'Email not confirmed'
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword(parsed.data)
+      if (signInError) {
+        setError(signInError.message === 'Email not confirmed'
           ? 'Confirma tu correo antes de iniciar sesión.'
-          : 'Correo o contraseña incorrectos.',
-      )
-      return
+          : 'Correo o contraseña incorrectos.')
+        return
+      }
+      const next = (location.state as { next?: string } | null)?.next ?? '/dashboard'
+      navigate(next)
+    } catch {
+      setError('No pudimos iniciar sesión. Revisa tu conexión e intenta de nuevo.')
+    } finally {
+      setSubmitting(false)
     }
-
-    const next = (location.state as { next?: string } | null)?.next ?? '/dashboard'
-    navigate(next)
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-4">
-      <h1 className="text-2xl font-semibold">Iniciar sesión</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <input
-          className="rounded border px-3 py-2"
-          placeholder="Correo"
+    <AuthLayout loading={submitting}><span className="eyebrow">QUÉ BUENO TENERTE AQUÍ</span>
+      <h1 className="auth-title">Bienvenido de nuevo.</h1><p className="auth-intro">Tu espacio de bienestar te está esperando.</p>
+      <form onSubmit={handleSubmit} className="auth-fields" aria-busy={submitting}>
+        <label className="field-label">Correo electrónico<input
+          className="field-input" required
+          placeholder="tu@correo.com"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
-        />
-        <input
-          className="rounded border px-3 py-2"
-          placeholder="Contraseña"
+        /></label>
+        <label className="field-label">Contraseña<input
+          className="field-input" required
+          placeholder="Tu contraseña"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"
-        />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        /></label>
+        {error && <p role="alert" className="error-message">{error}</p>}
         <button
           type="submit"
           disabled={submitting}
-          className="rounded bg-slate-900 px-4 py-2 text-white disabled:opacity-50"
+          className="button primary full"
         >
           {submitting ? 'Entrando...' : 'Entrar'}
         </button>
@@ -70,6 +72,6 @@ export function LoginPage() {
       <p className="text-sm text-slate-600">
         ¿No tienes cuenta? <Link to="/registro" className="underline">Regístrate</Link>
       </p>
-    </main>
+    </AuthLayout>
   )
 }

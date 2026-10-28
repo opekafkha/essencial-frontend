@@ -5,12 +5,13 @@ export type EstadoMembresia = 'activa' | 'inactiva'
 export type TipoMiembro = 'titular' | 'beneficiario'
 export type EstadoInvitacion = 'pendiente' | 'aceptada' | 'expirada' | 'cancelada'
 export type EstadoSala = 'activa' | 'expirada' | 'cerrada'
-export type ProveedorVideo = 'daily'
+export type ProveedorVideo = 'livekit'
 
 export interface ProfileRow {
   id: string
   email: string
   nombre: string | null
+  telefono?: string | null
   role: 'miembro' | 'profesional' | 'admin'
   created_at: string
   updated_at: string
@@ -48,8 +49,7 @@ export interface InvitacionRow {
 export interface VideoRoomRow {
   id: string
   slug: string
-  daily_room_name: string
-  daily_room_url: string
+  room_name: string
   provider: ProveedorVideo
   created_by: string
   status: EstadoSala

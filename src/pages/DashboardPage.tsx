@@ -1,25 +1,16 @@
+import './DashboardPage.css'
+import { JoinMeetingForm } from '../components/JoinMeetingForm'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
+import { AppLayout, PageHeading } from '../components/Design'
 
 export function DashboardPage() {
-  const { profile, signOut } = useAuth()
-  const canGenerarSala = profile?.role === 'profesional' || profile?.role === 'admin'
-
-  return (
-    <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center gap-3 px-4">
-      <h1 className="text-2xl font-semibold">Bienvenido{profile?.nombre ? `, ${profile.nombre}` : ''}</h1>
-      <p className="text-slate-600">Rol: {profile?.role}</p>
-      {canGenerarSala && (
-        <Link to="/generar-sala" className="w-fit rounded border px-4 py-2 text-sm hover:bg-slate-50">
-          Generar sala de videollamada
-        </Link>
-      )}
-      <button
-        onClick={() => void signOut()}
-        className="w-fit rounded border px-4 py-2 text-sm hover:bg-slate-50"
-      >
-        Cerrar sesión
-      </button>
-    </main>
-  )
+ const { profile } = useAuth()
+ const [step, setStep] = useState(0)
+ const [dismissed, setDismissed] = useState(() => { try { return localStorage.getItem('essencial-welcome') === 'done' } catch { return false } })
+ const pro = profile?.role === 'profesional' || profile?.role === 'admin'
+ const steps = [{ title: 'Este espacio también es tuyo.', text: 'Desde aquí puedes acceder a tu cuenta y encontrar tus espacios de conexión.' }, { title: 'Conectarte es sencillo.', text: pro ? 'Crea una sala, comparte el enlace con tu invitado y entra a la videollamada.' : 'Pega el enlace de tu profesional en el campo «Enlace de la reunión» de este inicio y pulsa «Entrar a la reunión».' }, { title: 'Prepara un momento para ti.', text: 'Busca un lugar tranquilo, revisa tu cámara y micrófono, y conecta a tu ritmo.' }]
+ function finish() { setDismissed(true); try { localStorage.setItem('essencial-welcome', 'done') } catch { /* Storage may be unavailable. */ } }
+ return <AppLayout className="dashboard-layout"><div className="dashboard-heading"><PageHeading label="MI INICIO" title={`Qué bueno verte${profile?.nombre ? `, ${profile.nombre.split(' ')[0]}` : ''}.`} description="Un momento para conectar, una oportunidad para estar mejor." /></div><section className="welcome-hero"><div><span className="eyebrow light">LO ESENCIAL EMPIEZA CONTIGO</span><h2>Dale espacio<br />a tu bienestar.</h2><p>Estamos aquí para acompañarte.<br />Da el siguiente paso a tu ritmo.</p><button className="button cream" onClick={() => { setStep(0); setDismissed(false) }}>Conoce tu espacio <span>↗</span></button></div><div className="hero-art" aria-hidden="true"><div className="arch arch-one" /><div className="arch arch-two" /><span>respira.<br /><em>conecta.</em><br />florece.</span><i>✳</i></div></section>{!dismissed && <section className="onboarding card" aria-label="Guía de bienvenida"><div className="step-count">0{step + 1}<span> / 03</span></div><div><span className="eyebrow">PRIMEROS PASOS</span><h3>{steps[step].title}</h3><p>{steps[step].text}</p><div className="step-dots" aria-label={`Paso ${step + 1} de 3`}>{steps.map((_, i) => <span key={i} className={step === i ? 'selected' : ''} />)}</div></div><div className="onboarding-actions"><button className="button primary" onClick={() => step < 2 ? setStep(step + 1) : finish()}>{step < 2 ? 'Siguiente →' : 'Comenzar →'}</button><button className="text-button" onClick={finish}>Omitir guía</button></div></section>}<div className="section-title"><h2>A un paso de conectar</h2><span>TU DÍA, A TU RITMO</span></div><div className="action-grid">{pro ? <Link className="action-card card" to="/generar-sala"><span className="feature-icon">◉</span><h3>Un espacio para conversar</h3><p>Crea una sala y comparte el enlace para comenzar una videollamada.</p><strong>Crear videollamada <span>↗</span></strong></Link> : <JoinMeetingForm />}{profile?.role === 'admin' ? <Link className="action-card card" to="/admin"><span className="feature-icon peach">▦</span><h3>Todo en perspectiva</h3><p>Consulta los usuarios de la plataforma y las reuniones en curso.</p><strong>Ir a administración <span>↗</span></strong></Link> : <article className="action-card card"><span className="feature-icon peach">✳</span><h3>Antes de conectar</h3><p>Un lugar tranquilo, audífonos y una conexión estable te ayudarán a disfrutar tu conversación.</p><span className="badge">Un momento para ti</span></article>}</div></AppLayout>
 }

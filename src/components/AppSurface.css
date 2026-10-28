@@ -1,0 +1,51 @@
+/* Shared surface for Inicio, Videollamadas and Administración. */
+.app-layout .app-body {
+  position: relative;
+  isolation: isolate;
+  background: #fff;
+  --surface-plant-height: clamp(420px, 68dvh, 900px);
+  --surface-veil-opacity: .68;
+}
+.app-layout .app-body::before,
+.app-layout .app-body::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -160px;
+  right: 0;
+  width: calc(var(--surface-plant-height) * 447 / 558);
+  max-width: 100%;
+  height: var(--surface-plant-height);
+  pointer-events: none;
+  user-select: none;
+}
+.app-layout .app-body::before {
+  background: url('/images/logueo2.png') center / contain no-repeat;
+  transform: rotate(285deg);
+}
+.app-layout .app-body::after {
+  background: rgb(255 255 255 / var(--surface-veil-opacity));
+}
+
+/* Align the white surface with the floating sidebar and reveal its corners. */
+.app-layout .app-body {
+  margin-top: var(--sidebar-gap);
+  margin-right: var(--sidebar-gap);
+  margin-bottom: var(--sidebar-gap);
+  width: calc(100% - var(--sidebar-width) - var(--sidebar-gap) * 3);
+  min-height: calc(100dvh - var(--sidebar-gap) * 2);
+  border: 1px solid #e4e9df;
+  border-radius: 28px;
+  box-shadow: 0 10px 36px #243c3506;
+  overflow: clip;
+}
+@media (max-width: 720px) {
+  .app-layout .app-body {
+    --surface-plant-height: clamp(320px, 48dvh, 440px);
+    --surface-veil-opacity: .84;
+    width: calc(100% - 24px);
+    margin: 12px;
+    min-height: calc(100dvh - 24px);
+    border-radius: 20px;
+  }
+}

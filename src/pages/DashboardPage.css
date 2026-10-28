@@ -1,0 +1,4 @@
+/* Dashboard spacing; the background is shared through AppSurface.css. */
+.dashboard-heading { margin-bottom: 28px; }
+.dashboard-heading .page-heading { margin-bottom: 0; }
+@media (max-width: 720px) { .dashboard-heading { margin-bottom: 24px; } }

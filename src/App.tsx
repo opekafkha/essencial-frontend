@@ -8,6 +8,7 @@ import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { JoinCallPage } from './pages/JoinCallPage'
 import { GenerarSalaPage } from './pages/GenerarSalaPage'
+import { AdminPage } from './pages/AdminPage'
 
 export function App() {
   return (
@@ -22,6 +23,9 @@ export function App() {
           <Route path="/join/:slug" element={<JoinCallPage />} />
           <Route element={<RequireRole allow={['profesional', 'admin']} />}>
             <Route path="/generar-sala" element={<GenerarSalaPage />} />
+          </Route>
+          <Route element={<RequireRole allow={['admin']} />}>
+            <Route path="/admin" element={<AdminPage />} />
           </Route>
         </Route>
       </Routes>

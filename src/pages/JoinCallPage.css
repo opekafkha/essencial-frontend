@@ -1,0 +1,143 @@
+/* Scoped to the call so LiveKit controls keep the Essencial identity. */
+.call-frame {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #dce4d7;
+  border-radius: 18px;
+  background: #fffefa;
+  box-shadow: 0 12px 40px #243c3508;
+}
+
+.call-frame-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 23px;
+  border-bottom: 1px solid #e3e8df;
+  color: #365b48;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.call-frame-header > div { display: flex; align-items: center; gap: 10px; }
+.call-frame-symbol { font-size: 20px; color: #79966b; }
+.call-frame-caption { color: #8b9782; font-size: 10px; font-weight: 400; }
+
+.call-frame .essencial-call {
+  --lk-bg: #edf1e8;
+  --lk-bg2: #e3eadd;
+  --lk-bg3: #d4dfcc;
+  --lk-fg: #284737;
+  --lk-fg2: #63775b;
+  --lk-border-color: #dce4d5;
+  --lk-border-radius: 10px;
+  --lk-control-bg: #e6ecde;
+  --lk-control-fg: #31553e;
+  --lk-control-hover-bg: #d8e3cf;
+  --lk-control-active-bg: #cadbbe;
+  --lk-control-active-hover-bg: #bdcfb0;
+  --lk-accent-bg: #244f43;
+  --lk-accent-fg: #fffefa;
+  --lk-danger: #a65343;
+  --lk-danger2: #914433;
+  --lk-danger-fg: #fffefa;
+  --lk-control-bar-height: 84px;
+  width: 100%;
+  height: clamp(360px, 62dvh, 680px);
+  min-width: 0;
+  font-family: Inter, "Segoe UI", sans-serif;
+  font-size: 12px;
+  color-scheme: light;
+}
+
+.essencial-call .lk-video-conference-inner { min-width: 0; min-height: 0; }
+.essencial-call .lk-grid-layout-wrapper,
+.essencial-call .lk-focus-layout-wrapper { min-height: 0; padding: 16px; }
+.essencial-call .lk-participant-tile { border-radius: 12px; background: #203c32; color: #fffefa; }
+.essencial-call .lk-participant-tile video { object-fit: contain; background: #203c32; }
+.essencial-call .lk-participant-metadata { color: #fffefa; }
+.essencial-call .lk-control-bar {
+  flex-shrink: 0;
+  min-height: var(--lk-control-bar-height);
+  padding: 16px;
+  gap: 9px;
+  background: #fffefa;
+  border-top: 1px solid #dce4d5;
+}
+.essencial-call .lk-button { min-height: 42px; font-size: 12px; font-weight: 600; }
+.essencial-call .lk-button[data-source="microphone"][data-enabled="false"],
+.essencial-call .lk-button[data-source="camera"][data-enabled="false"] { background: #f6e7df; color: #984c3d; }
+.essencial-call .lk-disconnect-button { min-height: 42px; background: #a65343; border-color: #a65343; color: #fffefa; }
+.essencial-call .lk-disconnect-button:not(:disabled):hover { background: #914433; border-color: #914433; }
+.essencial-call button:focus-visible { outline: 3px solid #b99d66; outline-offset: 3px; }
+.essencial-call .lk-chat { min-width: 0; max-width: min(320px, 100%); background: #fffefa; }
+.call-help { margin-top: 15px; text-align: center; color: #84917b; font-size: 11px; }
+
+@media (max-width: 900px) {
+  .call-frame .essencial-call { --lk-control-bar-height: 100px; }
+  .essencial-call .lk-control-bar { flex-wrap: wrap; gap: 7px; padding: 10px; }
+}
+@media (max-width: 540px) {
+  .call-frame { border-radius: 12px; }
+  .call-frame-header { padding: 13px 15px; }
+  .call-frame-caption { display: none; }
+  .call-frame .essencial-call { height: clamp(380px, 65dvh, 580px); --lk-control-bar-height: 116px; }
+  .essencial-call .lk-grid-layout-wrapper,
+  .essencial-call .lk-focus-layout-wrapper { padding: 8px; }
+  .essencial-call .lk-button { padding: 10px; }
+  .call-help { font-size: 10px; line-height: 1.7; }
+}
+
+.call-notice { display: flex; align-items: center; gap: 16px; padding: 16px 20px; margin-bottom: 18px; background: #f6eedc; border: 1px solid #e5d6b5; border-radius: 12px; }
+.call-notice p { flex: 1; color: #76613a; font-size: 12px; }
+.call-notice button { flex-shrink: 0; }
+@media (max-width: 540px) { .call-notice { flex-direction: column; align-items: flex-start; } }
+
+/* Same readable Essencial bubble for messages sent and received, for every role. */
+.essencial-call .lk-chat-entry[data-lk-message-origin="local"] .lk-message-body,
+.essencial-call .lk-chat-entry[data-lk-message-origin="remote"] .lk-message-body {
+  background-color: #244f43;
+  color: #fff;
+  padding: 9px 13px;
+  border-radius: 12px;
+  line-height: 1.6;
+}
+.essencial-call .lk-chat-entry .lk-message-body a { color: #fff; text-underline-offset: 3px; }
+.essencial-call .lk-chat-entry .lk-meta-data { color: #63775b; }
+.essencial-call .lk-chat-entry .lk-edit-button { color: #31553e; }
+
+.meeting-lobby { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(240px, 1fr); gap: 28px; align-items: start; }
+.lobby-preview { padding: 28px; border: 1px solid #dce4d7; border-radius: 18px; background: #fffefa; min-width: 0; }
+.lobby-preview-heading h2, .lobby-guide h2 { font-size: 30px; line-height: 1.2; }
+.lobby-preview-heading p { margin-top: 10px; color: #84917b; font-size: 12px; }
+.lobby-preview[data-lk-theme="default"] {
+  --lk-bg: #fffefa; --lk-bg2: #edf1e8; --lk-fg: #284737; --lk-fg5: #63775b;
+  --lk-border-color: #dce4d5; --lk-border-radius: 10px;
+  --lk-control-bg: #e6ecde; --lk-control-fg: #31553e; --lk-control-hover-bg: #d8e3cf;
+  --lk-control-active-bg: #cadbbe; --lk-control-active-hover-bg: #bdcfb0;
+  --lk-accent-bg: #244f43; --lk-accent-fg: #fff; --lk-accent2: #173c31;
+  --lk-accent3: #173c31; --lk-accent4: #173c31; color-scheme: light;
+}
+.lobby-preview .lk-prejoin { width: 100%; padding: 0; margin-top: 24px; font-size: 12px; font-family: inherit; }
+.lobby-preview .lk-video-container { max-height: 360px; background: #203c32; }
+.lobby-preview .lk-video-container video { object-fit: contain; }
+.lobby-preview .lk-camera-off-note { background: #203c32; color: #e3ebda; }
+.lobby-preview .lk-button { min-height: 45px; font-size: 12px; font-weight: 600; }
+.lobby-preview .lk-button[data-lk-enabled="false"] { background: #f6e7df; color: #984c3d; }
+/* Identity is supplied by the authenticated profile in the backend token. */
+.lobby-preview .lk-username-container input { display: none; }
+.lobby-preview .lk-join-button { width: 100%; }
+.lobby-preview .error-message { margin-top: 18px; }
+.lobby-identity { margin-top: 15px; font-size: 11px; color: #84917b; text-align: center; overflow-wrap: anywhere; }
+.lobby-guide { padding: 28px 12px; }
+.lobby-guide ul { list-style: none; padding: 0; margin: 28px 0; display: flex; flex-direction: column; gap: 24px; }
+.lobby-guide li { display: flex; align-items: start; gap: 13px; }
+.lobby-guide li > span { display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; color: #648151; background: #eaf0e1; font-size: 20px; }
+.lobby-guide h3 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.lobby-guide p { color: #819076; font-size: 12px; }
+.lobby-guide .lobby-private-note { padding: 16px 0; border-top: 1px solid #dce4d7; margin-bottom: 12px; font-size: 11px; }
+@media (max-width: 950px) { .meeting-lobby { grid-template-columns: 1fr; } .lobby-guide { padding: 10px; } }
+@media (max-width: 540px) { .lobby-preview { padding: 20px; } .lobby-preview-heading h2, .lobby-guide h2 { font-size: 26px; } .lobby-preview .lk-button-group-container { flex-wrap: wrap; gap: 10px; } .lobby-preview .lk-button-group-container > .lk-button-group { width: 100%; } }
+
+.essencial-call .call-connection-overlay { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 24px; background: rgb(255 254 250 / .94); border-radius: inherit; }

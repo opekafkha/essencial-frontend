@@ -1,10 +1,3 @@
-export function CheckEmailPage() {
-  return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-3 px-4 text-center">
-      <h1 className="text-2xl font-semibold">Revisa tu correo</h1>
-      <p className="text-slate-600">
-        Te enviamos un link de confirmación. Ábrelo para activar tu cuenta y poder iniciar sesión.
-      </p>
-    </main>
-  )
-}
+import { Link } from 'react-router-dom'
+import { AuthLayout } from '../components/Design'
+export function CheckEmailPage() { return <AuthLayout><span className="feature-icon">✉</span><span className="eyebrow">UN PASO MÁS</span><h1 className="auth-title">Revisa tu correo.</h1><p className="auth-intro">Si tu cuenta requiere confirmación, encontrarás un enlace en tu bandeja de entrada. Ábrelo para activar tu cuenta.</p><div className="soft-note">¿No lo encuentras? Revisa también la carpeta de correo no deseado.</div><Link className="button primary full" to="/login">Ir a iniciar sesión <span>→</span></Link></AuthLayout> }

@@ -13,7 +13,8 @@ retiró — una sola app web cubre todos los roles sin la complejidad de mantene
 
 - `src/App.tsx` — rutas: `/` (redirect a `/login`), `/registro` (`RegisterPage`),
   `/revisa-tu-correo` (`CheckEmailPage`), `/login`, y detrás de `RequireAuth`: `/dashboard`,
-  `/join/:slug` (`JoinCallPage`, se une a una videollamada con `@daily-co/daily-js`), y detrás de
+  `/join/:slug` (`JoinCallPage`, se une a una videollamada embebida con `@livekit/components-react`
+  — `<LiveKitRoom><VideoConference /></LiveKitRoom>`, no un iframe externo), y detrás de
   `RequireRole allow={['profesional', 'admin']}`: `/generar-sala` (`GenerarSalaPage`, crea la sala
   con `POST /video-rooms`).
 - `src/routes/RequireAuth.tsx` — guard de sesión (UX, no seguridad real — la autorización vive en
@@ -77,14 +78,16 @@ IP/dispositivo), RQ-09/RQ-10 (catálogo de planes, precios, envío real de invit
 (agenda completa). No construir nada de esto todavía — son requerimientos separados y facturados
 aparte según el plan del cliente.
 
-## Video — pendiente de cambio de proveedor
+## Video — LiveKit (reemplazó a Daily.co; se evaluó MiroTalk P2P en el camino, no se desplegó)
 
-Daily.co es el proveedor actual (`DAILY_API_KEY` en el backend, `@daily-co/daily-js` aquí) — se
-está evaluando reemplazarlo por un servicio open-source self-hosted. `GenerarSalaPage.tsx` y
-`JoinCallPage.tsx` no conocen a Daily directamente (solo consumen `POST /video-rooms` y
-`GET /video-rooms/:slug`), así que un cambio de proveedor es principalmente trabajo de backend
-(`src/lib/daily.ts` → nuevo adapter) más, en `JoinCallPage.tsx`, cambiar `DailyIframe` por el SDK
-del nuevo proveedor.
+Daily.co era pago — se reemplazó por LiveKit self-hosted (SFU real, no P2P: la calidad de la
+llamada no depende de la conexión/NAT de cada usuario), ver `essencial-backend/src/lib/livekit.ts`
+y `essencial-backend/infra/RUNBOOK.md` paso 4. `GenerarSalaPage.tsx` no cambió (sigue llamando
+`POST /video-rooms` tal cual). `JoinCallPage.tsx` usa `livekit-client` + `@livekit/components-react`:
+`GET /video-rooms/:slug` devuelve `{ token }` (JWT firmado por el backend, sin llamada de red a
+LiveKit — no como Daily/MiroTalk que sí pegaban a una API externa) y la página conecta con
+`<LiveKitRoom token={token} serverUrl={VITE_LIVEKIT_URL}><VideoConference /></LiveKitRoom>` — UI
+embebida en la propia app, no un iframe hacia otro dominio.
 
 `apps/desktop` (retirado) tenía un `secureStorageAdapter` que cifraba la sesión con el keychain del
 OS vía Electron `safeStorage` — no tiene equivalente real en un navegador (no hay acceso JS al

@@ -1,9 +1,12 @@
+import { AppLayout, PageHeading } from '../components/Design'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { createVideoRoomResponseSchema, type CreateVideoRoomResponse } from '../shared'
 import { backendClient } from '../lib/backendClient'
 
 export function GenerarSalaPage() {
   const [joinUrl, setJoinUrl] = useState<string | null>(null)
+  const [slug, setSlug] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -21,6 +24,7 @@ export function GenerarSalaPage() {
         return
       }
       setJoinUrl(parsed.data.joinUrl)
+      setSlug(parsed.data.slug)
     } catch {
       setError('No se pudo generar la sala. Intenta de nuevo.')
     } finally {
@@ -30,35 +34,45 @@ export function GenerarSalaPage() {
 
   async function handleCopy() {
     if (!joinUrl) return
-    await navigator.clipboard.writeText(joinUrl)
-    setCopied(true)
+    try {
+      await navigator.clipboard.writeText(joinUrl)
+      setCopied(true)
+    } catch { setError('No se pudo copiar. Selecciona el enlace y cópialo manualmente.') }
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-4">
-      <h1 className="text-2xl font-semibold">Generar sala de videollamada</h1>
+    <AppLayout><PageHeading label="VIDEOLLAMADAS" title="Un espacio para conectar." description="Prepara tu sala y comparte una conversación que importa." /><div className="room-grid"><section className="card room-card"><span className="feature-icon">◉</span>
+      <h2>Tu próxima conversación</h2>
       <p className="text-sm text-slate-600">
         Crea un link de 1 clic, sin agenda ni cita formal. La sala expira en 2 horas.
       </p>
       <button
         onClick={() => void handleGenerar()}
         disabled={submitting}
-        className="w-fit rounded bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+        className="button primary"
       >
         {submitting ? 'Generando...' : 'Generar sala'}
       </button>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      {joinUrl && (
-        <div className="flex flex-col gap-2 rounded border px-3 py-2">
+      {error && <p role="alert" className="error-message">{error}</p>}
+      {joinUrl && slug && (
+        <div className="generated-room">
           <p className="break-all text-sm">{joinUrl}</p>
-          <button
-            onClick={() => void handleCopy()}
-            className="w-fit rounded border px-3 py-1 text-sm hover:bg-slate-50"
-          >
-            {copied ? 'Copiado' : 'Copiar link'}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => void handleCopy()}
+              className="button secondary"
+            >
+              {copied ? 'Copiado' : 'Copiar link'}
+            </button>
+            <Link
+              to={`/join/${slug}`}
+              className="button primary"
+            >
+              Preparar entrada
+            </Link>
+          </div>
         </div>
       )}
-    </main>
+    </section><aside className="room-tips"><span className="eyebrow">ANTES DE EMPEZAR</span><h2>Los pequeños detalles<br />hacen la diferencia.</h2><ol><li>Busca un espacio tranquilo.</li><li>Revisa tu cámara y micrófono.</li><li>Comparte el enlace con tu invitado.</li></ol><p>La sala estará disponible durante 2 horas.</p></aside></div></AppLayout>
   )
 }
