@@ -6,9 +6,11 @@ import { defineConfig } from 'vite'
 // certs/ en la raiz del repo) para poder probar desde otra PC en la
 // misma red local: getUserMedia (camara/microfono) exige contexto
 // seguro (https), que "localhost" cumple gratis pero una IP de LAN no.
-export default defineConfig({
+// Solo se cargan en `vite dev` (command === 'serve') — en build de
+// producción (Vercel) esos certs no existen y no hacen falta.
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  server: {
+  server: command === 'serve' ? {
     host: true,
     https: {
       cert: readFileSync('../certs/dev-cert.pem'),
@@ -17,5 +19,5 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
-  },
-})
+  } : undefined,
+}))
