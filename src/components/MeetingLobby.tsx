@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react'
+import { useSpanishCallUI } from './useSpanishCallUI'
+import { useRef, useCallback, useState } from 'react'
 import { PreJoin, type LocalUserChoices } from '@livekit/components-react'
 import { Link } from 'react-router-dom'
 
@@ -8,6 +9,8 @@ interface MeetingLobbyProps {
 }
 
 export function MeetingLobby({ displayName, onJoin }: MeetingLobbyProps) {
+  const spanishUIRef = useRef<HTMLElement>(null)
+  useSpanishCallUI(spanishUIRef)
   const [notice, setNotice] = useState<string | null>(null)
   const handleDeviceError = useCallback((error: Error) => {
     console.error('Essencial: no se pudo preparar un dispositivo', error)
@@ -15,7 +18,7 @@ export function MeetingLobby({ displayName, onJoin }: MeetingLobbyProps) {
   }, [])
 
   return (
-    <section className="meeting-lobby notranslate" translate="no" aria-label="Preparar entrada a la reunión">
+    <section ref={spanishUIRef} className="meeting-lobby notranslate" translate="no" aria-label="Preparar entrada a la reunión">
       <div className="lobby-preview" data-lk-theme="default">
         <div className="lobby-preview-heading"><span className="eyebrow">VISTA PREVIA</span><h2>¿Todo listo para conectar?</h2><p>Solo tú puedes ver y escuchar esta preparación.</p></div>
         {notice && <p className="error-message" role="status">{notice}</p>}

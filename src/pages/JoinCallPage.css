@@ -141,3 +141,144 @@
 @media (max-width: 540px) { .lobby-preview { padding: 20px; } .lobby-preview-heading h2, .lobby-guide h2 { font-size: 26px; } .lobby-preview .lk-button-group-container { flex-wrap: wrap; gap: 10px; } .lobby-preview .lk-button-group-container > .lk-button-group { width: 100%; } }
 
 .essencial-call .call-connection-overlay { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 24px; background: rgb(255 254 250 / .94); border-radius: inherit; }
+
+/* The existing LiveKit Chat toggle opens a floating panel within the call. */
+.essencial-call .lk-video-conference {
+  --call-chat-width: clamp(260px, 27vw, 320px);
+  --call-chat-gap: 14px;
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 12px;
+}
+.essencial-call .lk-video-conference-inner {
+  box-sizing: border-box;
+  height: 100%;
+  padding-inline-end: 0;
+  transition: padding-inline-end 220ms cubic-bezier(.22, 1, .36, 1);
+}
+.essencial-call .lk-video-conference:has(> .lk-chat[style*="display: grid"]) .lk-video-conference-inner {
+  padding-inline-end: calc(var(--call-chat-width) + var(--call-chat-gap));
+}
+.essencial-call .lk-video-conference:has(> .lk-chat[style*="display: grid"]) .lk-control-bar { flex-wrap: wrap; }
+.essencial-call .lk-chat {
+  position: absolute;
+  z-index: 15;
+  inset: 12px 12px 12px auto;
+  width: var(--call-chat-width);
+  max-width: calc(100% - 24px);
+  height: auto;
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--theme-card);
+  color: var(--theme-text);
+  box-shadow: 0 8px 24px #0002;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(12px);
+  transition: opacity 180ms ease, transform 180ms ease, display 180ms allow-discrete;
+}
+.essencial-call .lk-chat[style*="display: grid"] { opacity: 1; pointer-events: auto; transform: translateX(0); }
+@starting-style {
+  .essencial-call .lk-chat[style*="display: grid"] { opacity: 0; transform: translateX(12px); }
+}
+.essencial-call .lk-chat-header {
+  min-height: 52px;
+  height: auto;
+  padding: 14px 44px 14px 16px;
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--line);
+  color: var(--theme-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+.essencial-call .lk-chat-header .lk-close-button { width: 30px; min-height: 30px; padding: 5px; border-radius: 50%; }
+.essencial-call .lk-chat-messages { min-height: 0; margin: 0; padding: 12px; }
+.essencial-call .lk-chat-entry { margin-inline: 0; font-size: 13px; }
+.essencial-call .lk-chat-entry .lk-meta-data { font-size: 11px; }
+.essencial-call .lk-chat-form { min-width: 0; max-height: none; padding: 12px; gap: 8px; border-color: var(--line); }
+.essencial-call .lk-chat-form-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--theme-input);
+  color: var(--theme-text);
+  font-size: 14px;
+}
+.essencial-call .lk-chat-form-button { flex-shrink: 0; font-size: 12px; }
+@media (max-width: 900px) {
+  .essencial-call .lk-video-conference:has(> .lk-chat[style*="display: grid"]) .lk-video-conference-inner { padding-inline-end: 0; }
+  .essencial-call .lk-chat { bottom: calc(var(--lk-control-bar-height) + 12px); width: min(320px, calc(100% - 24px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .essencial-call .lk-video-conference-inner,
+  .essencial-call .lk-chat { transition: none; }
+}
+
+/* Camera, microphone, screen share, leave and chat remain SDK controls in a floating dock. */
+.essencial-call .lk-video-conference-inner > .lk-grid-layout-wrapper,
+.essencial-call .lk-video-conference-inner > .lk-focus-layout-wrapper {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+}
+.essencial-call .lk-control-bar {
+  align-self: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 64px;
+  height: auto;
+  margin: 10px auto 0;
+  padding: 10px 12px;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--theme-card);
+  color: var(--theme-text);
+  box-shadow: 0 8px 24px #0002;
+}
+@media (max-width: 540px) {
+  .essencial-call .lk-control-bar { padding: 8px; gap: 6px; border-radius: 14px; }
+}
+
+/* Compact against the real video width, including space occupied by the chat. */
+.essencial-call .lk-video-conference-inner {
+  container-type: inline-size;
+  container-name: call-actions;
+}
+.essencial-call .lk-control-bar { max-height: none; }
+.essencial-call .lk-control-bar .lk-button-group { height: auto; flex-shrink: 0; }
+@container call-actions (max-width: 720px) {
+  .essencial-call .lk-control-bar {
+    padding: 8px;
+    gap: 6px;
+  }
+  .essencial-call .lk-control-bar :is(.lk-button, .lk-disconnect-button):has(> svg) {
+    width: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 10px;
+    gap: 0;
+    font-size: 0;
+    line-height: 0;
+    flex-shrink: 0;
+  }
+  .essencial-call .lk-control-bar :is(.lk-button, .lk-disconnect-button) > svg {
+    display: block;
+    flex-shrink: 0;
+  }
+  .essencial-call .lk-control-bar .lk-button-group-menu > .lk-button {
+    min-width: 26px;
+    min-height: 42px;
+    padding: 6px;
+    font-size: 12px;
+  }
+}

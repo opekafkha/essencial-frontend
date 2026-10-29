@@ -166,3 +166,12 @@
 @media (prefers-reduced-motion: reduce) {
   .auth-layout .auth-story > .brand { transition: none; }
 }
+
+/* Keep the login footer's signature beside its message, clear of the lower tab. */
+.auth-layout[data-auth-side="login"] .auth-story > footer {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px 14px;
+  margin-inline-start: 0;
+}

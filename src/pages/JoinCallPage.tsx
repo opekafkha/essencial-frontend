@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSpanishCallUI } from '../components/useSpanishCallUI'
+import { type ReactNode, useRef, useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { LiveKitRoom, VideoConference, type LocalUserChoices } from '@livekit/components-react'
 import { DisconnectReason } from 'livekit-client'
@@ -14,12 +15,19 @@ import { useAuth } from '../context/useAuth'
 import { getVideoRoomResponseSchema, type GetVideoRoomResponse } from '../shared'
 import { backendClient } from '../lib/backendClient'
 
+function SpanishCallFrame({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useSpanishCallUI(ref)
+  return <div ref={ref} style={{ display: 'contents' }}>{children}</div>
+}
+
 interface CallSessionProps {
   slug: string
   onRetry: () => void
 }
 
 function CallSession({ slug, onRetry }: CallSessionProps) {
+
   const { profile, session } = useAuth()
   const [choices, setChoices] = useState<LocalUserChoices | null>(null)
   const audioOptions = useMemo(() => choices?.audioEnabled ? { deviceId: choices.audioDeviceId || undefined } : false, [choices])
@@ -103,6 +111,7 @@ function CallSession({ slug, onRetry }: CallSessionProps) {
   return (
     <>
       {notice && <div className="call-notice" role="status"><p>{notice}</p><button className="button secondary" onClick={onRetry}>Volver a entrar</button></div>}
+      <SpanishCallFrame>
       <section className="call-frame notranslate" aria-label="Sala de videollamada" translate="no">
         <header className="call-frame-header">
           <div><span className="call-frame-symbol" aria-hidden="true">◉</span><span>Sala Essencial</span></div>
@@ -126,6 +135,7 @@ function CallSession({ slug, onRetry }: CallSessionProps) {
           <VideoConference />
         </LiveKitRoom>
       </section>
+      </SpanishCallFrame>
       <p className="call-help">Puedes activar o silenciar tu micrófono y cámara desde los controles de la sala.</p>
     </>
   )
