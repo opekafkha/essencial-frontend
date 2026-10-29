@@ -1,0 +1,8 @@
+/* Shared, readable type for users, rooms and future data tables. */
+.data-table { font-size: 14px; line-height: 1.55; }
+.data-table th { font-size: 12px; letter-spacing: .6px; }
+.data-table .badge { font-size: 12px; }
+.data-table .button { font-size: 13px; }
+.data-table .admin-participants p { font-size: 13px; }
+.data-table .admin-participants small { font-size: 12px; }
+@media (max-width: 720px) { .data-table { font-size: 13px; } }

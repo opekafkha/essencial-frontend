@@ -1,4 +1,4 @@
-import { AppLayout, PageHeading } from '../components/Design'
+import { PageHeading } from '../components/Design'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { createVideoRoomResponseSchema, type CreateVideoRoomResponse } from '../shared'
@@ -41,7 +41,7 @@ export function GenerarSalaPage() {
   }
 
   return (
-    <AppLayout><PageHeading label="VIDEOLLAMADAS" title="Un espacio para conectar." description="Prepara tu sala y comparte una conversación que importa." /><div className="room-grid"><section className="card room-card"><span className="feature-icon">◉</span>
+    <><PageHeading label="VIDEOLLAMADAS" title="Un espacio para conectar." description="Prepara tu sala y comparte una conversación que importa." /><div className="room-grid"><section className="card room-card"><span className="feature-icon">◉</span>
       <h2>Tu próxima conversación</h2>
       <p className="text-sm text-slate-600">
         Crea un link de 1 clic, sin agenda ni cita formal. La sala expira en 2 horas.
@@ -73,6 +73,6 @@ export function GenerarSalaPage() {
           </div>
         </div>
       )}
-    </section><aside className="room-tips"><span className="eyebrow">ANTES DE EMPEZAR</span><h2>Los pequeños detalles<br />hacen la diferencia.</h2><ol><li>Busca un espacio tranquilo.</li><li>Revisa tu cámara y micrófono.</li><li>Comparte el enlace con tu invitado.</li></ol><p>La sala estará disponible durante 2 horas.</p></aside></div></AppLayout>
+    </section><aside className="room-tips"><span className="eyebrow">ANTES DE EMPEZAR</span><h2>Los pequeños detalles<br />hacen la diferencia.</h2><ol><li>Busca un espacio tranquilo.</li><li>Revisa tu cámara y micrófono.</li><li>Comparte el enlace con tu invitado.</li></ol><p>La sala estará disponible durante 2 horas.</p></aside></div></>
   )
 }

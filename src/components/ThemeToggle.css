@@ -1,0 +1,27 @@
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  align-self: flex-start;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--theme-hover);
+  color: var(--theme-accent);
+}
+.theme-toggle:hover { background: var(--theme-selected); color: var(--theme-text); }
+.theme-toggle__icon { display: block; transform-origin: center; }
+.theme-toggle__icon[data-animate] { animation: theme-icon-shake 420ms ease-out; }
+@keyframes theme-icon-shake {
+  0%, 100% { transform: rotate(0) translateX(0); }
+  20% { transform: rotate(-16deg) translateX(-1px); }
+  40% { transform: rotate(13deg) translateX(1px); }
+  60% { transform: rotate(-9deg) translateX(-1px); }
+  80% { transform: rotate(5deg) translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle, .theme-toggle__icon[data-animate] { animation: none; transition: none; }
+}

@@ -1,16 +1,19 @@
-import { AuthLayout } from '../components/Design'
-import { useState, type FormEvent } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import type { AuthLayoutContext } from '../components/Design'
+import { useEffect, useState, type FormEvent } from 'react'
+import { Link, useNavigate, useLocation, useOutletContext } from 'react-router-dom'
 import { loginSchema } from '../shared'
 import { supabase } from '../lib/supabaseClient'
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const { setAuthLoading } = useOutletContext<AuthLayoutContext>()
   const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => () => setAuthLoading(false), [setAuthLoading])
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -23,6 +26,7 @@ export function LoginPage() {
     }
 
     setSubmitting(true)
+    setAuthLoading(true)
     try {
       const { error: signInError } = await supabase.auth.signInWithPassword(parsed.data)
       if (signInError) {
@@ -37,11 +41,12 @@ export function LoginPage() {
       setError('No pudimos iniciar sesión. Revisa tu conexión e intenta de nuevo.')
     } finally {
       setSubmitting(false)
+      setAuthLoading(false)
     }
   }
 
   return (
-    <AuthLayout loading={submitting}><span className="eyebrow">QUÉ BUENO TENERTE AQUÍ</span>
+    <><span className="eyebrow">QUÉ BUENO TENERTE AQUÍ</span>
       <h1 className="auth-title">Bienvenido de nuevo.</h1><p className="auth-intro">Tu espacio de bienestar te está esperando.</p>
       <form onSubmit={handleSubmit} className="auth-fields" aria-busy={submitting}>
         <label className="field-label">Correo electrónico<input
@@ -72,6 +77,6 @@ export function LoginPage() {
       <p className="text-sm text-slate-600">
         ¿No tienes cuenta? <Link to="/registro" className="underline">Regístrate</Link>
       </p>
-    </AuthLayout>
+    </>
   )
 }

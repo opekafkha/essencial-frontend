@@ -1,4 +1,3 @@
-import { AuthLayout } from '../components/Design'
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { registerSchema } from '../shared'
@@ -43,7 +42,7 @@ export function RegisterPage() {
   }
 
   return (
-    <AuthLayout><span className="eyebrow">COMIENZA TU CAMINO</span>
+    <><span className="eyebrow">COMIENZA TU CAMINO</span>
       <h1 className="auth-title">Tu bienestar empieza aquí.</h1><p className="auth-intro">Crea tu cuenta y empieza a conectar contigo.</p>
       <form onSubmit={handleSubmit} className="auth-fields">
         <label className="field-label">Nombre completo<input
@@ -87,6 +86,6 @@ export function RegisterPage() {
       <p className="text-sm text-slate-600">
         ¿Ya tienes cuenta? <Link to="/login" className="underline">Inicia sesión</Link>
       </p>
-    </AuthLayout>
+    </>
   )
 }

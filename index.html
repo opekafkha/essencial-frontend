@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Essencial · FundaColor</title>
+    <style>
+      html[data-theme="dark"] { background: var(--theme-page, #0d1512); color-scheme: dark; }
+      html[data-theme="light"] { background: var(--theme-page, #f7f8f4); color-scheme: light; }
+    </style>
+    <script>
+      // Apply the saved preference before the first paint.
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem('essencial.theme') === 'dark' ? 'dark' : 'light';
+      } catch {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

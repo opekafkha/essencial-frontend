@@ -4,11 +4,12 @@ import { LiveKitRoom, VideoConference, type LocalUserChoices } from '@livekit/co
 import { DisconnectReason } from 'livekit-client'
 import '@livekit/components-styles'
 import './JoinCallPage.css'
-import { AppLayout, PageHeading } from '../components/Design'
+import { PageHeading } from '../components/Design'
 import { CallErrorBoundary } from '../components/CallErrorBoundary'
 import { MeetingLobby } from '../components/MeetingLobby'
 import { Loader } from '../components/Loader'
 import { CallConnectionOverlay } from '../components/CallConnectionOverlay'
+import { CallNotifications } from '../components/CallNotifications'
 import { useAuth } from '../context/useAuth'
 import { getVideoRoomResponseSchema, type GetVideoRoomResponse } from '../shared'
 import { backendClient } from '../lib/backendClient'
@@ -121,6 +122,7 @@ function CallSession({ slug, onRetry }: CallSessionProps) {
           onDisconnected={handleDisconnected}
         >
           <CallConnectionOverlay />
+          <CallNotifications />
           <VideoConference />
         </LiveKitRoom>
       </section>
@@ -135,13 +137,13 @@ export function JoinCallPage() {
   const retry = useCallback(() => setAttempt((value) => value + 1), [])
 
   return (
-    <AppLayout>
+    <>
       <PageHeading label="VIDEOLLAMADA" title="Un momento para conectar." description="Tu conversación tiene su propio espacio. Ponte cómodo y conecta a tu ritmo." />
       {slug ? (
         <CallErrorBoundary key={`${slug}:${attempt}`} onRetry={retry}>
           <CallSession slug={slug} onRetry={retry} />
         </CallErrorBoundary>
       ) : <p className="error-message" role="alert">El enlace de la reunión no es válido.</p>}
-    </AppLayout>
+    </>
   )
 }

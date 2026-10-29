@@ -6,6 +6,7 @@ export const adminUserSchema = z.object({
   nombre: z.string().nullable(),
   telefono: z.string().nullable(),
   role: z.enum(['miembro', 'profesional', 'admin']),
+  plan: z.string().nullable().optional(),
   created_at: z.string(),
 })
 

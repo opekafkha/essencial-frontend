@@ -1,0 +1,158 @@
+:root {
+  color-scheme: light;
+  --theme-page: #f7f8f4;
+  --theme-surface: #ffffff;
+  --theme-sidebar: #fcfcf8;
+  --theme-card: #fffefa;
+  --theme-raised: #f1f5eb;
+  --theme-input: #ffffff;
+  --theme-hover: #f0f3e9;
+  --theme-selected: #eaf0e3;
+  --theme-text: #243c35;
+  --theme-muted: #748079;
+  --theme-accent: #244f43;
+  /* var() resuelve en uso, no en definicion -- con una sola linea aqui,
+     sileo sigue el valor vigente de --theme-accent (verde oscuro en claro,
+     verde menta claro en oscuro) sin repetir esto bajo [data-theme="dark"]. */
+  --sileo-state-success: var(--theme-accent);
+}
+
+/* sileo inyecta su propia hoja de estilos por JS al montar <Toaster>, que
+   puede llegar al DOM despues que la nuestra y pisar la variable de arriba
+   (bug visto: el verde quedaba casi invisible contra el fondo del toast en
+   tema claro). Clases propias + !important para que ganen sin depender del
+   orden de inyeccion -- pasadas via SileoOptions.styles.{title,description,badge}.
+   El panel del toast en si (SVG, prop "fill") ya sale solido en
+   --theme-accent -- el texto va en blanco encima para contraste, y el
+   badge/icono se queda en verde (circulo claro + icono blanco) como el
+   unico acento de color dentro del panel ya verde. */
+.essencial-toast-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+}
+.essencial-toast-description {
+  color: #ffffff !important;
+  opacity: 0.92;
+}
+.essencial-toast-badge {
+  color: var(--theme-accent) !important;
+  background-color: #ffffff !important;
+}
+/* En modo oscuro --theme-accent pasa a verde menta claro (#a4d5b8) -- el
+   panel del toast (fill) queda claro, y texto/icono blancos quedan tenues
+   encima. Mismo color que ya usa .primary en modo oscuro para texto sobre
+   el acento (theme.css linea ~95). */
+:root[data-theme="dark"] :is(.essencial-toast-title, .essencial-toast-description) {
+  color: #12291c !important;
+}
+:root[data-theme="dark"] .essencial-toast-badge {
+  color: #12291c !important;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-page: #0d1512;
+  --theme-surface: #141e1a;
+  --theme-sidebar: #17231e;
+  --theme-card: #1b2922;
+  --theme-raised: #22352b;
+  --theme-input: #101b15;
+  --theme-hover: #24382d;
+  --theme-selected: #2b4537;
+  --theme-text: #e3eee6;
+  --theme-muted: #a1b5a7;
+  --theme-accent: #a4d5b8;
+  --green: #a4d5b8;
+  --muted: #a1b5a7;
+  --line: #34483b;
+  color: var(--theme-text);
+  background: var(--theme-page);
+}
+:root[data-theme="dark"] body { color: var(--theme-text); background: var(--theme-page); }
+:root[data-theme="dark"] :is(.app-layout .sidebar, .sidebar-user-popover) {
+  color: var(--theme-text);
+  background: var(--theme-sidebar);
+  border-color: var(--line);
+  box-shadow: 0 12px 35px #0004;
+}
+:root[data-theme="dark"] .app-layout .app-body { background: var(--theme-surface); border-color: var(--line); }
+:root[data-theme="dark"] .app-layout .app-body::after { background: transparent; }
+:root[data-theme="dark"] :is(.card, .call-frame, .lobby-preview, .generated-room>p) {
+  color: var(--theme-text); background: var(--theme-card); border-color: var(--line);
+}
+:root[data-theme="dark"] :is(.profile-plan, .sidebar-user-popover__plan, .soft-note, .generated-room, .data-table th, .feature-icon, .profile-avatar, .avatar) {
+  background: var(--theme-raised); color: var(--theme-accent); border-color: var(--line);
+}
+:root[data-theme="dark"] :is(.sidebar nav a, .nav-label, .sidebar-note, .sidebar-user small, .topbar, .app-footer, .eyebrow, .section-title>span, .empty-state, .table-note, .admin-rooms-note, .auth-footnote, .text-button, .profile-back, .step-count, .onboarding p, .action-card p, .room-tips, .room-tips>p, .room-tips ol, .call-help, .call-frame-caption, .lobby-preview-heading p, .lobby-identity, .lobby-private-note) { color: var(--theme-muted); }
+:root[data-theme="dark"] :is(.sidebar nav a:hover, .sidebar button.sidebar-user:hover, .sidebar button.sidebar-user[aria-expanded="true"], .sidebar-user-popover__heading button:hover, .sidebar-user-popover__profile-action:hover, .data-table tbody tr:hover) { background: var(--theme-hover); }
+:root[data-theme="dark"] .sidebar nav a.active { background: var(--theme-selected); color: var(--theme-accent); }
+:root[data-theme="dark"] :is(.sidebar-plan-name, .sidebar-user-popover__profile-action, .sidebar-user-popover__signout, .action-card strong, .profile-back:hover, .call-frame-header) { color: var(--theme-accent); }
+:root[data-theme="dark"] .sidebar-user-popover__plan small { color: var(--theme-muted); }
+:root[data-theme="dark"] .sidebar nav.branched-menu {
+  --bm-ink: var(--theme-text);
+  --bm-accent: var(--theme-accent);
+  --bm-line: #4d6857;
+}
+:root[data-theme="dark"] .field-input {
+  color: var(--theme-text); background: var(--theme-input); border-color: var(--line);
+}
+:root[data-theme="dark"] .field-input::placeholder { color: #8fa396; }
+:root[data-theme="dark"] .field-input:hover { border-color: #72967e; }
+:root[data-theme="dark"] input:-webkit-autofill {
+  -webkit-text-fill-color: var(--theme-text);
+  -webkit-box-shadow: 0 0 0 1000px var(--theme-input) inset;
+}
+:root[data-theme="dark"] .primary { background: var(--theme-accent); color: #12291c; }
+:root[data-theme="dark"] .primary:hover { background: #b9e6cb; }
+:root[data-theme="dark"] .secondary { background: var(--theme-card); color: var(--theme-accent); border-color: var(--line); }
+:root[data-theme="dark"] .badge { background: var(--theme-raised); color: var(--theme-accent); border-color: var(--line); }
+:root[data-theme="dark"] :is(.data-table td, .call-frame-header) { border-color: var(--line); }
+:root[data-theme="dark"] .data-table th { color: var(--theme-muted); }
+:root[data-theme="dark"] .profile-fields dd { color: var(--theme-text); }
+:root[data-theme="dark"] .error-message { background: #3a251f; border-color: #724a3b; color: #f2b7a3; }
+:root[data-theme="dark"] .feature-icon.peach { background: #3a3020; color: #e5c093; }
+:root[data-theme="dark"] .call-notice { background: #342f20; border-color: #665a34; }
+:root[data-theme="dark"] .call-notice p { color: #e1d1a6; }
+:root[data-theme="dark"] .step-dots span { background: var(--line); }
+:root[data-theme="dark"] .step-dots .selected { background: var(--theme-accent); }
+:root[data-theme="dark"] .essencial-loader { --loader-color: var(--theme-accent); }
+:root[data-theme="dark"] .essencial-loader--light { --loader-color: #e9edce; }
+
+/* Keep both decorative seam tabs matched to their actual panel background. */
+:root[data-theme="dark"] .auth-layout { --auth-panel-paper: var(--theme-surface); }
+:root[data-theme="dark"] .auth-layout .auth-form { color: var(--theme-text); }
+:root[data-theme="dark"] .auth-story .eyebrow { color: #c4d6bb; }
+
+/* The call keeps its media intact; only controls and chat follow the theme. */
+:root[data-theme="dark"] :is(.call-frame .essencial-call, .lobby-preview[data-lk-theme="default"]) {
+  --lk-bg: #15231b;
+  --lk-bg2: #203326;
+  --lk-bg3: #2d4433;
+  --lk-fg: #e3eee6;
+  --lk-fg2: #a1b5a7;
+  --lk-fg5: #a1b5a7;
+  --lk-border-color: #34483b;
+  --lk-control-bg: #263e2e;
+  --lk-control-fg: #d0e8d7;
+  --lk-control-hover-bg: #34533d;
+  --lk-control-active-bg: #42684e;
+  --lk-control-active-hover-bg: #507b5c;
+  color-scheme: dark;
+}
+:root[data-theme="dark"] :is(.essencial-call .lk-control-bar, .essencial-call .lk-chat, .meeting-lobby .lk-prejoin, .meeting-lobby .lk-button, .meeting-lobby .lk-form-control) {
+  color: var(--theme-text); background: var(--theme-card); border-color: var(--line);
+}
+:root[data-theme="dark"] .essencial-call .lk-chat-entry .lk-meta-data { color: var(--theme-muted); }
+:root[data-theme="dark"] :is(.lobby-guide, .lobby-guide p, .lobby-guide li>span) { color: var(--theme-muted); }
+
+:root[data-theme="dark"] .lobby-guide li>span { background: var(--theme-raised); }
+:root[data-theme="dark"] .lobby-guide .lobby-private-note { border-color: var(--line); }
+:root[data-theme="dark"] .essencial-call .call-connection-overlay { background: rgb(20 30 26 / .96); }
+
+:root[data-theme="dark"] .lobby-preview .lk-join-button { background: var(--theme-accent); color: #12291c; }
+
+/* Preserve the leaf shading and veins instead of flattening the PNG into a silhouette. */
+:root[data-theme="dark"] .app-layout .app-body::before {
+  filter: grayscale(1) brightness(1.15);
+  opacity: .7;
+}

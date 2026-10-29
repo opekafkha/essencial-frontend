@@ -14,6 +14,8 @@ const { LoginPage } = await loadTypeScript('src/pages/LoginPage.tsx', {
   },
 })
 
+const { AuthLayout } = await loadTypeScript('src/components/Design.tsx')
+
 for (const outcome of ['network-error', 'invalid-credentials', 'success']) {
   test(`login loader follows pending request and clears on ${outcome}`, async () => {
     const dom = new JSDOM('<!doctype html><div id="root"></div>', { url: 'https://meeting.test/login' })
@@ -27,7 +29,8 @@ for (const outcome of ['network-error', 'invalid-credentials', 'success']) {
     try {
       await act(async () => root.render(createElement(MemoryRouter, { initialEntries: ['/login'] },
         createElement(Routes, null,
-          createElement(Route, { path: '/login', element: createElement(LoginPage) }),
+          createElement(Route, { element: createElement(AuthLayout) },
+            createElement(Route, { path: '/login', element: createElement(LoginPage) })),
           createElement(Route, { path: '/dashboard', element: createElement('p', null, 'Inicio de mi cuenta') })))))
       assert.equal(document.querySelector('.auth-seam-tab [role="status"]'), null)
       await act(async () => document.querySelector('form').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true })))

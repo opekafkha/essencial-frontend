@@ -49,3 +49,6 @@
     border-radius: 20px;
   }
 }
+
+/* Only the routed content moves; the sidebar and app surface remain mounted. */
+.page-view { min-width: 0; }

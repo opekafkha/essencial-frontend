@@ -4,6 +4,8 @@
   isolation: isolate;
   overflow: clip;
   --auth-panel-green: #244f43;
+  --auth-panel-paper: #fbfbf7;
+  --auth-seam-offset: 38px;
 }
 .auth-layout .auth-story {
   background: var(--auth-panel-green);
@@ -15,19 +17,20 @@
 .auth-story > .story-content,
 .auth-story > footer { position: relative; z-index: 1; }
 .auth-seam-tab {
+  --tab-color: var(--auth-panel-green);
   --tab-join-radius: 28px;
   position: absolute;
   z-index: 2;
-  top: 38px;
+  top: var(--auth-seam-offset);
   left: 50%;
   width: clamp(180px, 15vw, 270px);
   height: clamp(76px, 7vw, 112px);
   transform: translateX(-50%);
   border-radius: 34px;
-  background: var(--auth-panel-green);
+  background: var(--tab-color);
   pointer-events: none;
 }
-/* Concave white corners soften both joins with the green panel. */
+/* Concave corners blend each tab into the panel of the same color. */
 .auth-seam-tab::before,
 .auth-seam-tab::after {
   content: '';
@@ -38,12 +41,20 @@
 }
 .auth-seam-tab::before {
   top: calc(-1 * var(--tab-join-radius));
-  background: radial-gradient(circle at top right, transparent calc(var(--tab-join-radius) - .5px), var(--auth-panel-green) var(--tab-join-radius));
+  background: radial-gradient(circle at top right, transparent calc(var(--tab-join-radius) - .5px), var(--tab-color) var(--tab-join-radius));
 }
 .auth-seam-tab::after {
   bottom: calc(-1 * var(--tab-join-radius));
-  background: radial-gradient(circle at bottom right, transparent calc(var(--tab-join-radius) - .5px), var(--auth-panel-green) var(--tab-join-radius));
+  background: radial-gradient(circle at bottom right, transparent calc(var(--tab-join-radius) - .5px), var(--tab-color) var(--tab-join-radius));
 }
+/* The lower paper tab mirrors the green one into the left panel. */
+.auth-seam-tab--bottom {
+  --tab-color: var(--auth-panel-paper);
+  top: auto;
+  bottom: var(--auth-seam-offset);
+  transform: translateX(-50%) rotate(180deg);
+}
+.auth-layout .auth-form { background: var(--auth-panel-paper); }
 .auth-botanical {
   --plant-height: clamp(420px, 68dvh, 800px);
   position: absolute;
@@ -64,7 +75,8 @@
   .auth-botanical { --plant-height: clamp(330px, 48dvh, 560px); right: -12px; }
 }
 @media (max-width: 1050px) and (min-width: 721px) {
-  .auth-seam-tab { --tab-join-radius: 20px; top: 32px; width: 160px; height: 76px; border-radius: 26px; }
+  .auth-layout { --auth-seam-offset: 32px; }
+  .auth-seam-tab { --tab-join-radius: 20px; width: 160px; height: 76px; border-radius: 26px; }
 }
 @media (max-width: 720px) { .auth-seam-tab { display: none; } }
 
@@ -81,3 +93,76 @@
 .auth-tab-loader { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; display: grid; place-items: center; }
 .auth-mobile-loader { display: none; }
 @media (max-width: 720px) { .auth-mobile-loader { display: flex; justify-content: center; margin-bottom: 24px; } }
+
+/* Keep one shell mounted while the auth route changes, so transforms can glide. */
+.auth-layout {
+  --auth-slide-duration: 480ms;
+  --auth-slide-ease: cubic-bezier(.22, 1, .36, 1);
+  --auth-seam-direction: 1;
+  background: var(--auth-panel-paper);
+}
+.auth-layout[data-auth-side="register"] { --auth-seam-direction: -1; }
+.auth-seam-tab {
+  transform: translateX(-50%) scaleX(var(--auth-seam-direction));
+  /* Reveal solid color from the seam; never blend the two panel colors. */
+  clip-path: inset(calc(-1 * var(--tab-join-radius)) 0);
+  transition: clip-path 180ms var(--auth-slide-ease);
+}
+.auth-layout[data-auth-tabs-moving] .auth-seam-tab {
+  /* Keep the concave joins inside the reveal area, without scaling their curves. */
+  clip-path: inset(calc(-1 * var(--tab-join-radius)) 50%);
+  transition: none;
+}
+.auth-seam-tab--bottom {
+  transform: translateX(-50%) scaleX(var(--auth-seam-direction)) rotate(180deg);
+}
+/* Reserve space on both sides of the footer for the lower paper curve. */
+.auth-layout .auth-story > footer {
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-inline: clamp(48px, 5vw, 90px);
+}
+.auth-form .form-content {
+  animation: auth-form-arrive var(--auth-slide-duration) ease both;
+}
+@keyframes auth-form-arrive {
+  0%, 30% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@media (min-width: 721px) {
+  .auth-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .auth-layout .auth-story,
+  .auth-layout .auth-form {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    width: 100%;
+    transition: transform var(--auth-slide-duration) var(--auth-slide-ease);
+  }
+  .auth-layout .auth-story { z-index: 1; transform: translateX(0); }
+  .auth-layout .auth-form { transform: translateX(100%); }
+  .auth-layout[data-auth-side="register"] .auth-story { transform: translateX(100%); }
+  .auth-layout[data-auth-side="register"] .auth-form { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-layout .auth-story,
+  .auth-layout .auth-form,
+  .auth-layout .auth-seam-tab { transition: none; }
+  .auth-layout .form-content { animation: none; }
+  .auth-layout[data-auth-tabs-moving] .auth-seam-tab { clip-path: inset(calc(-1 * var(--tab-join-radius)) 0); }
+}
+
+/* Keep the brand clear of the upper seam when the green panel is on the right. */
+@media (min-width: 721px) {
+  .auth-layout .auth-story > .brand {
+    width: fit-content;
+    transform: translateX(0);
+    transition: transform var(--auth-slide-duration) var(--auth-slide-ease);
+  }
+  .auth-layout[data-auth-side="register"] .auth-story > .brand {
+    transform: translateX(clamp(64px, 4vw, 80px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-layout .auth-story > .brand { transition: none; }
+}

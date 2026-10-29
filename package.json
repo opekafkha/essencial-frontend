@@ -19,9 +19,11 @@
     "@livekit/components-styles": "^1.2.0",
     "@supabase/supabase-js": "^2.116.0",
     "livekit-client": "^2.23.0",
+    "lucide-react": "^1.63.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.3",
+    "sileo": "^0.1.6",
     "zod": "^4.5.4"
   },
   "devDependencies": {

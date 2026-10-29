@@ -25,28 +25,10 @@
   min-width: 0;
   transition: margin-left var(--sidebar-duration) var(--sidebar-easing), width var(--sidebar-duration) var(--sidebar-easing);
 }
-.sidebar-header { position: relative; display: block; height: 92px; flex-shrink: 0; margin-bottom: 10px; }
+.sidebar-header { position: relative; display: block; height: 52px; flex-shrink: 0; margin-bottom: 10px; }
 .sidebar .sidebar-header .brand { margin: 0; padding-left: 10px; width: max-content; font-size: 24px; gap: 10px; transition: gap var(--sidebar-duration) var(--sidebar-easing); }
 .sidebar .sidebar-header .brand-symbol { width: 33px; height: 37px; font-size: 31px; flex-shrink: 0; }
 .sidebar .sidebar-header .brand small { font-size: 7px; letter-spacing: 1.7px; }
-.sidebar-toggle {
-  position: absolute;
-  right: 3px;
-  top: 4px;
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid #e1e8d8;
-  border-radius: 9px;
-  background: #f0f4e9;
-  color: #51714b;
-  font-size: 24px;
-  line-height: 1;
-  transition: top var(--sidebar-duration) var(--sidebar-easing), right var(--sidebar-duration) var(--sidebar-easing), background .18s;
-}
-.sidebar-toggle > span { display: block; transition: transform var(--sidebar-duration) var(--sidebar-easing); }
-.sidebar-toggle:hover { background: #e2ead8; }
 .sidebar .brand-wordmark,
 .sidebar .sidebar-label,
 .sidebar .sidebar-user-details {
@@ -72,8 +54,6 @@
 .sidebar .signout { position: static; display: flex; flex-shrink: 0; align-items: center; justify-content: flex-start; min-height: 40px; padding: 8px 12px; gap: 8px; overflow: hidden; }
 .sidebar .signout > span:first-child { width: 30px; text-align: center; flex-shrink: 0; font-size: 17px; }
 .app-layout[data-sidebar-collapsed="true"] .sidebar-header .brand { gap: 0; }
-.app-layout[data-sidebar-collapsed="true"] .sidebar-toggle { top: 54px; right: 13px; }
-.app-layout[data-sidebar-collapsed="true"] .sidebar-toggle > span { transform: rotate(180deg); }
 .app-layout[data-sidebar-collapsed="true"] .sidebar .brand-wordmark,
 .app-layout[data-sidebar-collapsed="true"] .sidebar .sidebar-label,
 .app-layout[data-sidebar-collapsed="true"] .sidebar .sidebar-user-details {
@@ -106,7 +86,6 @@
   .sidebar .nav-label, .sidebar .sidebar-note { display: none; }
   .sidebar .signout { margin-top: 12px; max-height: 45px; transition: max-height var(--sidebar-duration) var(--sidebar-easing), min-height var(--sidebar-duration) var(--sidebar-easing), margin-top var(--sidebar-duration) var(--sidebar-easing), padding var(--sidebar-duration) var(--sidebar-easing), opacity 180ms ease, visibility 0s; }
   .app-layout .sidebar nav { max-height: 70px; margin-top: 16px; overflow: hidden; opacity: 1; visibility: visible; transition: max-height var(--sidebar-duration) var(--sidebar-easing), margin-top var(--sidebar-duration) var(--sidebar-easing), opacity 180ms ease, visibility 0s; }
-  .app-layout[data-sidebar-collapsed="true"] .sidebar-toggle { top: 4px; right: 3px; }
   .app-layout[data-sidebar-collapsed="true"] .sidebar .brand-wordmark { max-width: 160px; opacity: 1; visibility: visible; transform: none; }
   .app-layout[data-sidebar-collapsed="true"] .sidebar-header .brand { gap: 10px; }
   .app-layout[data-sidebar-collapsed="true"] .sidebar nav,
@@ -115,3 +94,8 @@
 @media (prefers-reduced-motion: reduce) {
   .app-layout .sidebar, .app-layout .app-body, .app-layout .sidebar * { transition: none !important; }
 }
+
+.sidebar .sidebar-brand-toggle { border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; }
+.sidebar .sidebar-brand-toggle:hover { color: var(--green); }
+
+.sidebar nav a > span:first-child { display: grid; place-items: center; }
