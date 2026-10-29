@@ -13,7 +13,29 @@ import { GenerarSalaPage } from './pages/GenerarSalaPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { AdminPage } from './pages/AdminPage'
 
+// Bloqueo temporal para pruebas, independiente de cualquier plan de
+// Vercel (Deployment Protection en Hobby no cubre el dominio de
+// producción). Activar poniendo VITE_MAINTENANCE_MODE=true en las
+// variables de entorno de Vercel y haciendo redeploy; desactivar
+// quitando la variable (o en false) y redeploy de nuevo.
+function MaintenancePage() {
+  return (
+    <div style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', textAlign: 'center',
+      padding: '2rem', fontFamily: 'system-ui, sans-serif',
+    }}>
+      <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>404</h1>
+      <p style={{ color: '#666' }}>Esta página no existe.</p>
+    </div>
+  )
+}
+
 export function App() {
+  if (import.meta.env.VITE_MAINTENANCE_MODE === 'true') {
+    return <MaintenancePage />
+  }
+
   return (
     <AuthProvider>
       <Toaster position="top-right" theme="system" />
