@@ -88,6 +88,7 @@
 :root[data-theme="dark"] .sidebar nav a.active { background: var(--theme-selected); color: var(--theme-accent); }
 :root[data-theme="dark"] :is(.sidebar-plan-name, .sidebar-user-popover__profile-action, .sidebar-user-popover__signout, .action-card strong, .profile-back:hover, .call-frame-header) { color: var(--theme-accent); }
 :root[data-theme="dark"] .sidebar-user-popover__plan small { color: var(--theme-muted); }
+:root[data-theme="dark"] .brand-symbol { background-color: #fff; }
 :root[data-theme="dark"] .sidebar nav.branched-menu {
   --bm-ink: var(--theme-text);
   --bm-accent: var(--theme-accent);
